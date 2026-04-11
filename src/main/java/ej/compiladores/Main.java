@@ -22,10 +22,11 @@ public class Main {
 
         scanner.close();
 
-        String codigoFuente = codigo.toString(); //Convierte el StringBuilser a String para poder ser evaluado.
+        String codigoFuente = codigo.toString(); //Convierte el StringBuilder a String para poder ser evaluado.
 
         TablaSimbolos tablaSimbolos = new TablaSimbolos();
-        AnalizadorLexico lexer = new AnalizadorLexico(codigoFuente, tablaSimbolos);
+        TablaErrores tablaErrores   = new TablaErrores(); //Registra los errores encontrados durante el escaneo.
+        AnalizadorLexico lexer = new AnalizadorLexico(codigoFuente, tablaSimbolos, tablaErrores);
         List<ParTokenLexema> pares = lexer.escanear();
 
         System.out.println("\n\nTOKENS DETECTADOS:");
@@ -37,5 +38,6 @@ public class Main {
         }
 
         tablaSimbolos.imprimir();
+        tablaErrores.imprimir();
     }
 }
