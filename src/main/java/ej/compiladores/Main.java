@@ -24,6 +24,7 @@ public class Main {
 
         String codigoFuente = codigo.toString(); //Convierte el StringBuilder a String para poder ser evaluado.
 
+        // ── Análisis léxico ───────────────────────────────────────────────────
         TablaSimbolos tablaSimbolos = new TablaSimbolos();
         TablaErrores tablaErrores   = new TablaErrores(); //Registra los errores encontrados durante el escaneo.
         AnalizadorLexico lexer = new AnalizadorLexico(codigoFuente, tablaSimbolos, tablaErrores);
@@ -39,5 +40,29 @@ public class Main {
 
         tablaSimbolos.imprimir();
         tablaErrores.imprimir();
+
+        // ── Análisis sintáctico ───────────────────────────────────────────────
+        System.out.println("\n\nANÁLISIS SINTÁCTICO:");
+        System.out.println("───────────────────────────────────────────────────────────────────\n");
+
+        if (tablaErrores.hayErrores()) {
+            //Si hay errores léxicos no tiene sentido continuar con el análisis sintáctico.
+            System.out.println("No se puede realizar el análisis sintáctico porque existen errores léxicos.");
+        } else {
+            AnalizadorSintactico parser = new AnalizadorSintactico(pares);
+            NodoArbol arbol = parser.parsear();
+
+            System.out.println("ÁRBOL DE DERIVACIÓN:");
+            System.out.println("-".repeat(40));
+            arbol.imprimir("");  //Imprime el árbol con indentación.
+
+            if (parser.hayErrores()) {
+                System.out.println("\nERRORES SINTÁCTICOS:");
+                System.out.println("-".repeat(40));
+                parser.imprimirErrores();
+            } else {
+                System.out.println("\nAnálisis sintáctico completado sin errores.");
+            }
+        }
     }
 }
